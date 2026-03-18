@@ -1,0 +1,575 @@
+[
+    {
+        "dummy_input": {
+            "attr": {
+                "attr": {},
+                "type": "dummy"
+            },
+            "inbounds": [],
+            "outbounds": [
+                "mul_1",
+                "SE/AvgPool"
+            ]
+        },
+        "Add_1": {
+            "attr": {
+                "attr": {
+                    "weight_shape": null
+                },
+                "node": null,
+                "type": "Add"
+            },
+            "inbounds": [
+                "SE/conv2d_1/BiasAdd"
+            ],
+            "outbounds": [
+                "Relu6"
+            ]
+        },
+        "Relu6": {
+            "attr": {
+                "attr": {
+                    "weight_shape": null
+                },
+                "node": null,
+                "type": "Relu6"
+            },
+            "inbounds": [
+                "Add_1"
+            ],
+            "outbounds": [
+                "mul"
+            ]
+        },
+        "mul": {
+            "attr": {
+                "attr": {
+                    "weight_shape": null
+                },
+                "node": null,
+                "type": "Mul"
+            },
+            "inbounds": [
+                "Relu6"
+            ],
+            "outbounds": [
+                "mul_1"
+            ]
+        },
+        "mul_1": {
+            "attr": {
+                "attr": {
+                    "weight_shape": null
+                },
+                "node": null,
+                "type": "Mul"
+            },
+            "inbounds": [
+                "mul",
+                "dummy_input"
+            ],
+            "outbounds": [
+            ]
+        },
+        "SE/AvgPool": {
+            "attr": {
+                "attr": {},
+                "type": "AvgPool"
+            },
+            "inbounds": [
+                "dummy_input"
+            ],
+            "outbounds": [
+                "SE/conv2d/Conv2D"
+            ]
+        },
+        "SE/Relu": {
+            "attr": {
+                "attr": {},
+                "type": "Relu"
+            },
+            "inbounds": [
+                "SE/conv2d/BiasAdd"
+            ],
+            "outbounds": [
+                "SE/conv2d_1/Conv2D"
+            ]
+        },
+        "SE/conv2d/BiasAdd": {
+            "attr": {
+                "attr": {},
+                "type": "BiasAdd"
+            },
+            "inbounds": [
+                "SE/conv2d/Conv2D"
+            ],
+            "outbounds": [
+                "SE/Relu"
+            ]
+        },
+        "SE/conv2d/Conv2D": {
+            "attr": {
+                "attr": {},
+                "type": "Conv2D"
+            },
+            "inbounds": [
+                "SE/AvgPool"
+            ],
+            "outbounds": [
+                "SE/conv2d/BiasAdd"
+            ]
+        },
+        "SE/conv2d_1/BiasAdd": {
+            "attr": {
+                "attr": {},
+                "type": "BiasAdd"
+            },
+            "inbounds": [
+                "SE/conv2d_1/Conv2D"
+            ],
+            "outbounds": [
+                "Add_1"
+            ]
+        },
+        "SE/conv2d_1/Conv2D": {
+            "attr": {
+                "attr": {},
+                "type": "Conv2D"
+            },
+            "inbounds": [
+                "SE/Relu"
+            ],
+            "outbounds": [
+                "SE/conv2d_1/BiasAdd"
+            ]
+        }
+    },
+    {
+        "dummy_input": {
+            "attr": {
+                "attr": {},
+                "type": "dummy"
+            },
+            "inbounds": [],
+            "outbounds": [
+                "GlobalAveragePool_9"
+            ]
+        },
+        "GlobalAveragePool_9": {
+            "attr": {
+                "attr": {},
+                "type": "gap"
+            },
+            "inbounds": [
+                "dummy_input"
+            ],
+            "outbounds": [
+                "Conv_10"
+            ]
+        },
+        "Conv_10": {
+            "attr": {
+                "attr": {},
+                "type": "conv"
+            },
+            "inbounds": [
+                "GlobalAveragePool_9"
+            ],
+            "outbounds": [
+                "Relu_11"
+            ]
+        },
+        "Relu_11": {
+            "attr": {
+                "attr": {},
+                "type": "relu"
+            },
+            "inbounds": [
+                "Conv_10"
+            ],
+            "outbounds": [
+                "Conv_12"
+            ]
+        },
+        "Conv_12": {
+            "attr": {
+                "attr": {},
+                "type": "conv"
+            },
+            "inbounds": [
+                "Relu_11"
+            ],
+            "outbounds": [
+                "HardSigmoid_13"
+            ]
+        },
+        "HardSigmoid_13": {
+            "attr": {
+                "attr": {},
+                "type": "hardsigmoid"
+            },
+            "inbounds": [
+                "Conv_12"
+            ],
+            "outbounds": [
+                "Mul_14"
+            ]
+        },
+        "Mul_14": {
+            "attr": {
+                "attr": {},
+                "type": "mul"
+            },
+            "inbounds": [
+                "dummy_input",
+                "HardSigmoid_13"
+            ],
+            "outbounds": []
+        }
+    },
+    {
+        "ReduceMean_0": {
+            "attr": {
+                "attr": {
+                    "axes": [
+                        3
+                    ],
+                    "keepdims": 1
+                },
+                "type": "gap",
+                "input_shape": [
+                    [
+                        1,
+                        56,
+                        56,
+                        64
+                    ]
+                ],
+                "output_shape": [
+                    [
+                        1,
+                        56,
+                        1,
+                        64
+                    ]
+                ]
+            },
+            "outbounds": [
+                "ReduceMean_1"
+            ],
+            "inbounds": []
+        },
+        "ReduceMean_1": {
+            "attr": {
+                "attr": {
+                    "axes": [
+                        2
+                    ],
+                    "keepdims": 1
+                },
+                "type": "gap",
+                "input_shape": [
+                    [
+                        1,
+                        56,
+                        1,
+                        64
+                    ]
+                ],
+                "output_shape": [
+                    [
+                        1,
+                        1,
+                        1,
+                        64
+                    ]
+                ]
+            },
+            "outbounds": [
+                "Conv_2"
+            ],
+            "inbounds": [
+                "ReduceMean_0"
+            ]
+        },
+        "Conv_2": {
+            "attr": {
+                "attr": {
+                    "dilations": [
+                        1,
+                        1
+                    ],
+                    "group": 1,
+                    "pads": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "strides": [
+                        1,
+                        1
+                    ],
+                    "ks": [
+                        1,
+                        1
+                    ]
+                },
+                "type": "conv",
+                "input_shape": [
+                    [
+                        1,
+                        1,
+                        1,
+                        64
+                    ]
+                ],
+                "output_shape": [
+                    [
+                        1,
+                        1,
+                        1,
+                        16
+                    ]
+                ]
+            },
+            "outbounds": [
+                "Relu_3"
+            ],
+            "inbounds": [
+                "ReduceMean_1"
+            ]
+        },
+        "Relu_3": {
+            "attr": {
+                "attr": {},
+                "type": "relu",
+                "input_shape": [
+                    [
+                        1,
+                        1,
+                        1,
+                        16
+                    ]
+                ],
+                "output_shape": [
+                    [
+                        1,
+                        1,
+                        1,
+                        16
+                    ]
+                ]
+            },
+            "outbounds": [
+                "Conv_4"
+            ],
+            "inbounds": [
+                "Conv_2"
+            ]
+        },
+        "Conv_4": {
+            "attr": {
+                "attr": {
+                    "dilations": [
+                        1,
+                        1
+                    ],
+                    "group": 1,
+                    "pads": [
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "strides": [
+                        1,
+                        1
+                    ],
+                    "ks": [
+                        1,
+                        1
+                    ]
+                },
+                "type": "conv",
+                "input_shape": [
+                    [
+                        1,
+                        1,
+                        1,
+                        16
+                    ]
+                ],
+                "output_shape": [
+                    [
+                        1,
+                        1,
+                        1,
+                        64
+                    ]
+                ]
+            },
+            "outbounds": [
+                "Add_6",
+                "Mul_10"
+            ],
+            "inbounds": [
+                "Relu_3"
+            ]
+        },
+        "Add_6": {
+            "attr": {
+                "attr": {},
+                "type": "add",
+                "input_shape": [
+                    [
+                        1,
+                        1,
+                        1,
+                        64
+                    ]
+                ],
+                "output_shape": [
+                    [
+                        1,
+                        1,
+                        1,
+                        64
+                    ]
+                ]
+            },
+            "outbounds": [
+                "Clip_7"
+            ],
+            "inbounds": [
+                "Conv_4"
+            ]
+        },
+        "Clip_7": {
+            "attr": {
+                "attr": {
+                    "max": 6.0,
+                    "min": 0.0
+                },
+                "type": "relu",
+                "input_shape": [
+                    [
+                        1,
+                        1,
+                        1,
+                        64
+                    ]
+                ],
+                "output_shape": [
+                    [
+                        1,
+                        1,
+                        1,
+                        64
+                    ]
+                ]
+            },
+            "outbounds": [
+                "Div_9"
+            ],
+            "inbounds": [
+                "Add_6"
+            ]
+        },
+        "Div_9": {
+            "attr": {
+                "attr": {},
+                "type": "div",
+                "input_shape": [
+                    [
+                        1,
+                        1,
+                        1,
+                        64
+                    ]
+                ],
+                "output_shape": [
+                    [
+                        1,
+                        1,
+                        1,
+                        64
+                    ]
+                ]
+            },
+            "outbounds": [
+                "Mul_10"
+            ],
+            "inbounds": [
+                "Clip_7"
+            ]
+        },
+        "Mul_10": {
+            "attr": {
+                "attr": {},
+                "type": "mul",
+                "input_shape": [
+                    [
+                        1,
+                        1,
+                        1,
+                        64
+                    ],
+                    [
+                        1,
+                        1,
+                        1,
+                        64
+                    ]
+                ],
+                "output_shape": [
+                    [
+                        1,
+                        1,
+                        1,
+                        64
+                    ]
+                ]
+            },
+            "outbounds": [
+                "Mul_11"
+            ],
+            "inbounds": [
+                "Conv_4",
+                "Div_9"
+            ]
+        },
+        "Mul_11": {
+            "attr": {
+                "attr": {},
+                "type": "mul",
+                "input_shape": [
+                    [
+                        1,
+                        1,
+                        1,
+                        64
+                    ],
+                    [
+                        1,
+                        1,
+                        1,
+                        64
+                    ]
+                ],
+                "output_shape": [
+                    [
+                        1,
+                        56,
+                        56,
+                        64
+                    ]
+                ]
+            },
+            "outbounds": [],
+            "inbounds": [
+                "Mul_10"
+            ]
+        }
+    }
+]

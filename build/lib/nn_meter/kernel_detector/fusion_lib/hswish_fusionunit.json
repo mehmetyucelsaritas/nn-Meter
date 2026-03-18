@@ -1,0 +1,388 @@
+[
+    {
+        "dummy_input": {
+            "attr": {
+                "attr": {},
+                "type": "dummy"
+            },
+            "inbounds": [],
+            "outbounds": [
+                "conv1.hswish.hswish/mul_1",
+                "conv1.hswish.hswish/add"
+            ]
+        },
+        "conv1.hswish.hswish/Relu6": {
+            "attr": {
+                "attr": {},
+                "type": "Relu6"
+            },
+            "inbounds": [
+                "conv1.hswish.hswish/add"
+            ],
+            "outbounds": [
+                "conv1.hswish.hswish/mul"
+            ]
+        },
+        "conv1.hswish.hswish/add": {
+            "attr": {
+                "attr": {
+                    "weight_shape": null
+                },
+                "node": null,
+                "shape": [],
+                "type": "Add"
+            },
+            "inbounds": [
+                "dummy_input"
+            ],
+            "outbounds": [
+                "conv1.hswish.hswish/Relu6"
+            ]
+        },
+        "conv1.hswish.hswish/mul": {
+            "attr": {
+                "attr": {},
+                "type": "Mul"
+            },
+            "inbounds": [
+                "conv1.hswish.hswish/Relu6"
+            ],
+            "outbounds": [
+                "conv1.hswish.hswish/mul_1"
+            ]
+        },
+        "conv1.hswish.hswish/mul_1": {
+            "attr": {
+                "attr": {},
+                "type": "Mul"
+            },
+            "inbounds": [
+                "conv1.hswish.hswish/mul",
+                "dummy_input"
+            ],
+            "outbounds": [
+                "layer2.1.conv/Conv2D"
+            ]
+        }
+    },
+    {
+        "dummy_input": {
+            "attr": {
+                "attr": {},
+                "type": "dummy"
+            },
+            "inbounds": [],
+            "outbounds": [
+                "Add_2",
+                "Mul_6"
+            ]
+        },
+        "Add_2": {
+            "attr": {
+                "attr": {},
+                "type": "Add"
+            },
+            "outbounds": [
+                "Clip_3"
+            ],
+            "inbounds": [
+                "dummy_input"
+            ]
+        },
+        "Clip_3": {
+            "attr": {
+                "attr": {},
+                "type": "Clip"
+            },
+            "outbounds": [
+                "Div_5"
+            ],
+            "inbounds": [
+                "Add_2"
+            ]
+        },
+        "Div_5": {
+            "attr": {
+                "attr": {},
+                "type": "Div"
+            },
+            "outbounds": [
+                "Mul_6"
+            ],
+            "inbounds": [
+                "Clip_3"
+            ]
+        },
+        "Mul_6": {
+            "attr": {
+                "attr": {},
+                "type": "Mul"
+            },
+            "outbounds": [
+            ],
+            "inbounds": [
+                "dummy_input",
+                "Div_5"
+            ]
+        }
+    },
+    {
+        "Add_1": {
+            "attr": {
+                "attr": {},
+                "type": "add",
+                "input_shape": [
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ],
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ]
+                ],
+                "output_shape": [
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ]
+                ]
+            },
+            "outbounds": [
+                "Relu_2"
+            ],
+            "inbounds": []
+        },
+        "Relu_2": {
+            "attr": {
+                "attr": {},
+                "type": "relu",
+                "input_shape": [
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ]
+                ],
+                "output_shape": [
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ]
+                ]
+            },
+            "outbounds": [
+                "Mul_3"
+            ],
+            "inbounds": [
+                "Add_1"
+            ]
+        },
+        "Mul_3": {
+            "attr": {
+                "attr": {},
+                "type": "mul",
+                "input_shape": [
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ],
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ]
+                ],
+                "output_shape": [
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ]
+                ]
+            },
+            "outbounds": [
+                "Mul_5"
+            ],
+            "inbounds": [
+                "Relu_2"
+            ]
+        },
+        "Mul_5": {
+            "attr": {
+                "attr": {},
+                "type": "mul",
+                "input_shape": [
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ],
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ]
+                ],
+                "output_shape": [
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ]
+                ]
+            },
+            "outbounds": [],
+            "inbounds": [
+                "Mul_3"
+            ]
+        }
+    },
+    {
+        "Add_1": {
+            "attr": {
+                "attr": {},
+                "type": "add",
+                "input_shape": [
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ],
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ]
+                ],
+                "output_shape": [
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ]
+                ]
+            },
+            "outbounds": [
+                "Clip_2"
+            ],
+            "inbounds": []
+        },
+        "Clip_2": {
+            "attr": {
+                "attr": {
+                    "max": 6.0,
+                    "min": 0.0
+                },
+                "type": "relu",
+                "input_shape": [
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ]
+                ],
+                "output_shape": [
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ]
+                ]
+            },
+            "outbounds": [
+                "Div_4"
+            ],
+            "inbounds": [
+                "Add_1"
+            ]
+        },
+        "Div_4": {
+            "attr": {
+                "attr": {},
+                "type": "div",
+                "input_shape": [
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ],
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ]
+                ],
+                "output_shape": [
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ]
+                ]
+            },
+            "outbounds": [
+                "Mul_5"
+            ],
+            "inbounds": [
+                "Clip_2"
+            ]
+        },
+        "Mul_5": {
+            "attr": {
+                "attr": {},
+                "type": "mul",
+                "input_shape": [
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ],
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ]
+                ],
+                "output_shape": [
+                    [
+                        1,
+                        224,
+                        224,
+                        3
+                    ]
+                ]
+            },
+            "outbounds": [],
+            "inbounds": [
+                "Div_4"
+            ]
+        }
+    }
+]
