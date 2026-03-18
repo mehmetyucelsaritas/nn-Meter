@@ -39,7 +39,8 @@ class KernelGenerator:
         logging.info(f"building kernel for {kernel_type}...")
         count = 0
         error_save_path = os.path.join(self.workspace_path, 'results', 'generate_error.log')
-        for id, value in self.kernels.items():
+        # Iterate on a snapshot since we may drop failed kernels
+        for id, value in list(self.kernels.items()):
             model_path = os.path.join(self.case_save_path, ("_".join([kernel_type, self.mark, id]) + self.model_suffix))
             kernel_cfg = value['config']
             try:
@@ -55,6 +56,8 @@ class KernelGenerator:
                 count += 1
             except Exception as e:
                 open(os.path.join(self.workspace_path, "results", "generate_error.log"), 'a').write(f"{id}: {e}\n")
+                # Ensure downstream steps (profiling / feature extraction) don't see invalid entries
+                self.kernels.pop(id, None)
 
         # save information to json file in incrementally mode
         info_save_path = os.path.join(self.workspace_path, "results", f"{kernel_type}_{self.mark}.json")

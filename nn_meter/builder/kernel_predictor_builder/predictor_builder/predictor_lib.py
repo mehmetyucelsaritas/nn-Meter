@@ -424,6 +424,10 @@ __PREDICTOR_ZOO__ = {
 def init_predictor(kernel_type, backend):
     try:
         model_param = __PREDICTOR_ZOO__[kernel_type][backend]
+        # sklearn>=1.2 dropped RandomForestRegressor(max_features="auto")
+        if model_param.get("max_features", None) == "auto":
+            model_param = dict(model_param)
+            model_param["max_features"] = 1.0
         model = RandomForestRegressor(**model_param)
     except:
         model = RandomForestRegressor(
@@ -431,7 +435,8 @@ def init_predictor(kernel_type, backend):
             n_estimators = 370,
             min_samples_leaf = 1,
             min_samples_split = 2,
-            max_features = "auto",
+            # sklearn>=1.2 dropped "auto"; for regressors "all features" is max_features=1.0
+            max_features = 1.0,
             oob_score = True,
             random_state = 10,
         )
