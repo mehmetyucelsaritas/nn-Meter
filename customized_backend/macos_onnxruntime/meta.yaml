@@ -1,0 +1,10 @@
+builtin_name: macos_onnxruntime
+
+package_location: /Users/mehmet/Desktop/repo/nn-Meter/customized_backend/macos_onnxruntime
+
+class_module: backend
+class_name: MacOSONNXRuntimeBackend
+
+# Default backend config copied into workspace as `configs/backend_config.yaml`
+defaultConfigFile: /Users/mehmet/Desktop/repo/nn-Meter/customized_backend/macos_onnxruntime/default_config.yaml
+

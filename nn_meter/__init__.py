@@ -4,7 +4,9 @@
 try:
     import pkg_resources  # part of setuptools
     __version__ = pkg_resources.require("nn-meter")[0].version
-except ModuleNotFoundError:
+except Exception:
+    # In editable/source-tree usage nn-meter might not be installed as a distribution yet,
+    # causing pkg_resources to raise DistributionNotFound (or other resolution errors).
     __version__ = 'UNKNOWN'
 
 from functools import partial, partialmethod
@@ -24,7 +26,11 @@ from .utils import (
     download_from_url,
     latency_metrics
 )
-from .dataset import bench_dataset
+try:
+    from .dataset import bench_dataset
+except ModuleNotFoundError:
+    # Optional dependency (e.g., `jsonlines`) may be missing in minimal builder-only setups.
+    bench_dataset = None
 
 # setup logging
 import sys

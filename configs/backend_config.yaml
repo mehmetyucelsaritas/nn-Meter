@@ -1,0 +1,24 @@
+# Local macOS backend (Apple Silicon friendly) using ONNX Runtime.
+#
+# This backend is intended for nn-Meter "torch" implementation mode where
+# generated kernel micro-models are exported to ONNX already.
+#
+# Notes:
+# - If `USE_COREML_EP` is true and ORT has CoreML EP available, it will be used.
+# - Otherwise it falls back to CPUExecutionProvider automatically.
+
+# Prefer Core ML (if available in your onnxruntime build)
+USE_COREML_EP: true
+
+# Threading controls (CPU EP + some shared ORT settings)
+INTRA_OP_NUM_THREADS: 0     # 0 => ORT default
+INTER_OP_NUM_THREADS: 0     # 0 => ORT default
+
+# Benchmark settings (inference timing)
+WARMUP_RUNS: 10
+NUM_RUNS: 50
+BATCH_SIZE: 1
+
+# If true, include ORT provider list in profiler output
+VERBOSE: false
+

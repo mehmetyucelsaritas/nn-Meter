@@ -43,3 +43,5 @@ cover/
 
 # Sphinx documentation
 docs/_build/
+predictor_build/*
+*__pycache__
