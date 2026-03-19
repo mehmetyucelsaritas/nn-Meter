@@ -198,7 +198,12 @@ def connect_backend(backend_name):
     """
     if backend_name in __REG_BACKENDS__:
         backend_info = __REG_BACKENDS__[backend_name]
-        sys.path.append(backend_info["package_location"])
+        # Note: registry.yaml entries may become stale if the repo path changes.
+        # We therefore only append the configured location if it exists.
+        configured_pkg_location = backend_info.get("package_location")
+        if configured_pkg_location and os.path.isdir(configured_pkg_location):
+            if configured_pkg_location not in sys.path:
+                sys.path.append(configured_pkg_location)
     elif backend_name in __BUILTIN_BACKENDS__:
         backend_info = __BUILTIN_BACKENDS__[backend_name]
     else:
@@ -206,7 +211,29 @@ def connect_backend(backend_name):
 
     module = backend_info["class_module"]
     name = backend_info["class_name"]
-    backend_module = importlib.import_module(module)   
+
+    # Import backend module.
+    # For customized backends, `class_module` is often a simple module name like `backend`
+    # stored under `<repo-root>/customized_backend/<backend_name>/backend.py`.
+    # If the configured `package_location` is stale, the import may fail; we try a repo-local fallback.
+    backend_module = None
+    try:
+        backend_module = importlib.import_module(module)
+    except ModuleNotFoundError as e:
+        # Only attempt fallback when the missing module is exactly the expected one.
+        missing_name = getattr(e, "name", None)
+        if backend_name in __REG_BACKENDS__ and missing_name == module:
+            repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../.."))
+            candidate_dir = os.path.join(repo_root, "customized_backend", backend_name)
+            if os.path.isdir(candidate_dir) and module and "." not in module:
+                if candidate_dir not in sys.path:
+                    sys.path.append(candidate_dir)
+                backend_module = importlib.import_module(module)
+            else:
+                raise
+        else:
+            raise
+
     backend_cls = getattr(backend_module, name)
 
     # load configs from workspace

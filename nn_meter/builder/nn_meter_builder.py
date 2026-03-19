@@ -11,6 +11,32 @@ from .utils import save_profiled_results, merge_info, handle_timeout
 from nn_meter.builder.backends import connect_backend
 logging = logging.getLogger("nn-Meter")
 
+def _cleanup_model_files(models, remove_converted=True):
+    """Best-effort delete generated kernel model files to save disk.
+
+    This is safe for predictor training because training uses parsed config/features + labels,
+    and only stores the basename of the model path in exported CSVs.
+    """
+    def _rm(p):
+        try:
+            if p and os.path.isfile(p):
+                os.remove(p)
+        except Exception:
+            # best-effort cleanup; never fail the build due to cleanup issues
+            pass
+
+    if not isinstance(models, dict):
+        return
+    for module in models.values():
+        if not isinstance(module, dict):
+            continue
+        for m in module.values():
+            if not isinstance(m, dict):
+                continue
+            _rm(m.get("model"))
+            if remove_converted:
+                _rm(m.get("converted_model"))
+
 
 def convert_models(backend, models, mode = 'predbuild', broken_point_mode = False, model_save_path = None):
     """ convert the model to the needed format by backend, in order to increase efficiency when profiling on device.
@@ -197,6 +223,11 @@ def sample_and_profile_kernel_data(kernel_type, sample_num, backend, sampling_mo
     # connect to backend, run models and get latency
     backend = connect_backend(backend_name=backend)
     profiled_results = profile_models(backend, models, mode='predbuild', metrics=metrics, save_name=f"profiled_{kernel_type}.json")
+
+    # Optional cleanup: generated kernel models can be huge (especially ONNX),
+    # and are not required after profiling/training.
+    if builder_config.get("CLEANUP_KERNEL_MODELS", "predbuild"):
+        _cleanup_model_files(profiled_results, remove_converted=True)
     return profiled_results
 
 
